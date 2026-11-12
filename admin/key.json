@@ -1,0 +1,9 @@
+{
+  "v": 1,
+  "rounds": 600000,
+  "salt": "enEISggCaShgbEAU7iqkLQ==",
+  "iv": "/+/uMbO+PQMon+SK",
+  "ct": "6GANHYlYruyVCksDZrVLw1r8/a2UYgZw/tIrCOmcreEqq/2so8yK1/wiPo+JONGjJehbMalPjEQ6vY3le3FAhqSSy/rcdLaDYd8xIbBNyix9SHpMHEwfeu00uv5GrjCNMWoeKkJZbDYjUU+mqw==",
+  "owner": "gunnitynes",
+  "repo": "orvar-smarason"
+}
