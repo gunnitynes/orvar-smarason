@@ -170,12 +170,6 @@
   }
   .mail:hover, .mail:focus-visible { background-size: 100% .5em; }
 
-  footer {
-    display: flex; justify-content: space-between; gap: 1em; flex-wrap: wrap;
-    padding: 28px var(--gutter) 36px;
-    border-top: 1px solid var(--rule);
-    font-size: .74em; letter-spacing: .14em; text-transform: uppercase; color: var(--soft);
-  }
   [hidden] { display: none !important; }
   :focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
 
@@ -246,11 +240,6 @@
   </section>
 </main>
 
-<footer>
-  <span id="foot-name">Örvar Smárason</span>
-  <span id="foot-note"></span>
-</footer>
-
 <noscript>
   <p style="padding:0 var(--gutter) 40px">Örvar Smárason, writer. Contact: apfelblut@yahoo.com</p>
 </noscript>
@@ -290,7 +279,6 @@
       var first = parts.length > 1 ? parts.slice(0, -1).join(' ') : name;
       var last = parts.length > 1 ? parts[parts.length - 1] : '';
       $('name').innerHTML = '<span>' + esc(first) + '</span>' + (last ? '<span>' + esc(last) + '</span>' : '');
-      $('foot-name').textContent = name;
       document.title = name;
     }
     $('tagline').textContent = c.tagline || '';
@@ -328,7 +316,6 @@
       $('mail').textContent = c.email;
       $('mail').href = 'mailto:' + c.email;
     }
-    $('foot-note').textContent = c.footer || '';
     watch();
   }
 

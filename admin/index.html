@@ -141,8 +141,6 @@
         <input type="text" id="l-contact" aria-label="Contact heading">
       </div>
       <p class="hint">Rename these to use another language, for example Um / Bækur / Textar / Hafa samband.</p>
-      <label for="f-footer">Footer note (optional)</label>
-      <input type="text" id="f-footer">
     </div>
   </div>
 </div>
@@ -229,7 +227,6 @@
     $('f-tagline').value = data.tagline || '';
     $('f-email').value = data.email || '';
     $('f-about').value = data.about || '';
-    $('f-footer').value = data.footer || '';
     ['about', 'books', 'texts', 'contact'].forEach(function (k) { $('l-' + k).value = data.labels[k] || ''; });
     drawBooks(); drawTexts();
   }
@@ -238,7 +235,7 @@
     data.tagline = $('f-tagline').value.trim();
     data.email = $('f-email').value.trim();
     data.about = $('f-about').value;
-    data.footer = $('f-footer').value.trim();
+    delete data.footer;
     ['about', 'books', 'texts', 'contact'].forEach(function (k) { data.labels[k] = $('l-' + k).value.trim(); });
   }
 
