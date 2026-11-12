@@ -226,11 +226,11 @@
   }
   .sheet.shown .sheet-close { opacity: 1; }
   .sheet-close:hover { background: var(--orange); border-color: var(--orange); color: #fff; transform: rotate(90deg); }
-  body.locked { overflow: hidden; }
   @media (max-width: 760px) {
     .sheet { place-items: start center; padding-top: 74px; }
     .sheet-panel { grid-template-columns: 1fr; gap: 28px; }
     .sheet-img img { max-height: 52vh; }
+    .sheet-close { width: 54px; height: 54px; font-size: 32px; top: 12px; right: 12px; }
   }
 
   .text-item + .text-item { margin-top: clamp(48px, 7vw, 96px); }
@@ -452,6 +452,19 @@
   }
   var REST = { transform: 'none', clipPath: 'inset(0px 0px)', boxShadow: '0 30px 60px -24px rgba(22,21,15,.45)' };
 
+  // Pin the page in place while the window is open, so nothing behind it can scroll (phones included).
+  var pinnedAt = 0, touch = window.matchMedia && matchMedia('(hover: none)').matches;
+  function freeze() {
+    pinnedAt = window.scrollY;
+    var bar = window.innerWidth - document.documentElement.clientWidth, st = document.body.style;
+    st.position = 'fixed'; st.top = -pinnedAt + 'px'; st.left = '0'; st.right = '0'; st.paddingRight = bar + 'px';
+  }
+  function thaw() {
+    var st = document.body.style;
+    st.position = st.top = st.left = st.right = st.paddingRight = '';
+    window.scrollTo({ top: pinnedAt, left: 0, behavior: 'instant' });
+  }
+
   function openBook(el) {
     var b = shown[+el.getAttribute('data-i')];
     if (!b || busy || sheet.classList.contains('open')) return;
@@ -470,13 +483,14 @@
     sheet.scrollTop = 0;
     sheet.classList.add('open');
     sheet.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('locked');
+    freeze();
     var f = !calm && b.image && simg.animate ? flight() : null;
     if (f) {
       el.classList.add('lifted');
       simg.animate([f, REST], { duration: 720, easing: EASE });
     }
-    requestAnimationFrame(function () { sheet.classList.add('shown'); });
+    void sheet.offsetWidth;            // settle the starting state, then fade in
+    sheet.classList.add('shown');
     $('sheet-close').focus({ preventScroll: true });
   }
   function closeBook() {
@@ -486,7 +500,7 @@
     var done = function () {
       sheet.classList.remove('open');
       sheet.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('locked');
+      thaw();
       if (from) { from.classList.remove('lifted'); from.focus({ preventScroll: true }); }
       busy = false;
     };
@@ -505,6 +519,7 @@
   });
   $('sheet-close').addEventListener('click', closeBook);
   sheet.addEventListener('click', function (e) {
+    if (touch && !e.target.closest('a')) { closeBook(); return; }   // on a phone, a tap anywhere closes it
     if (e.target === sheet || e.target.id === 'sheet-bg' || e.target.id === 'sheet-panel' || e.target.classList.contains('sheet-img')) closeBook();
   });
   document.addEventListener('keydown', function (e) {
