@@ -24,9 +24,10 @@
     },
     {
       "title": "Le masque de sommeil et autres nouvelles",
-      "note": "French edition of Svefngríman, translated by Hadrien Chalard. Traverse(s) / Projectiles",
+      "note": "French edition of Svefngríman",
       "image": "images/le-masque-de-sommeil.jpg",
-      "whole": false
+      "whole": false,
+      "info": "French edition of Svefngríman, translated by Hadrien Chalard. Traverse(s) / Projectiles"
     },
     {
       "title": "Úfin, strokin",
