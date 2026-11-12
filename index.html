@@ -182,7 +182,9 @@
     .hero-text { padding: 13vw var(--gutter) 8vw; }
     h1 { margin-right: 0; font-size: clamp(3.2rem, 19.5vw, 8rem); }
     .tagline { margin-top: 9vw; }
-    .hero-photo { min-height: 78svh; }
+    /* the portrait fills what is left of the first screen, trimming empty wall, not the sitter */
+    .hero-photo { min-height: 92vw; }
+    .hero-photo img { object-position: 50% 72%; }
     .dot.o { left: 52vw; top: 2vw; width: 42vw; }
     .dot.p { left: 63vw; top: 39vw; width: 22vw; }
     section { grid-template-columns: 1fr; gap: 26px; }
