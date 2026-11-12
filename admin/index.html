@@ -73,29 +73,45 @@
 
   <!-- ============ sign in ============ -->
   <div id="login">
-    <div class="card">
+    <div class="card" id="pw-card" hidden>
       <h2>Sign in</h2>
-      <p style="margin-top:0">This page edits the website. The site's text and pictures are stored on GitHub, so you sign in with a GitHub access key (a "token"). You only do this once on each computer.</p>
-      <label for="token">GitHub access token</label>
-      <input type="password" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
-      <div class="row">
-        <div><label for="owner">GitHub account</label><input type="text" id="owner" spellcheck="false"></div>
-        <div><label for="repo">Repository</label><input type="text" id="repo" spellcheck="false"></div>
-      </div>
-      <p class="hint">Account and repository are filled in for you. Only change them if the site has been moved.</p>
-      <p style="margin:18px 0 0"><button class="primary" id="connect">Sign in</button></p>
-      <p class="msg bad" id="login-msg" hidden></p>
+      <label for="pw">Password</label>
+      <input type="password" id="pw" autocomplete="current-password">
+      <p style="margin:18px 0 0"><button class="primary" id="unlock">Sign in</button></p>
+      <p class="msg bad" id="pw-msg" hidden></p>
+      <p class="hint" style="margin-top:22px"><a href="#" id="redo">Set up again with a new GitHub token</a> (only needed if the old token has expired).</p>
     </div>
-    <div class="card">
-      <h2>How to get a token</h2>
-      <ol>
-        <li>Log in to <a href="https://github.com" target="_blank" rel="noopener">github.com</a> with an account that is allowed to edit this repository.</li>
-        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
-        <li>Under <em>Repository access</em> choose <em>Only select repositories</em> and pick this site's repository.</li>
-        <li>Under <em>Permissions → Repository permissions</em> set <em>Contents</em> to <em>Read and write</em>.</li>
-        <li>Generate the token, copy it, and paste it above.</li>
-      </ol>
-      <p class="hint">The token is kept only in this browser. Use "Sign out" on a shared computer.</p>
+
+    <div id="setup" hidden>
+      <div class="card">
+        <h2>First-time setup</h2>
+        <p style="margin-top:0">This is done once. After it, signing in only takes the password, on any computer or phone.</p>
+        <p class="hint" style="margin:0 0 6px">The site's text and pictures are stored on GitHub, so the editor needs a GitHub access key (a "token"). It is locked with your password and saved with the site; only the password can open it.</p>
+        <label for="token">GitHub access token</label>
+        <input type="password" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        <div class="row">
+          <div><label for="pw1">Password for this page</label><input type="password" id="pw1" autocomplete="new-password"></div>
+          <div><label for="pw2">Password again</label><input type="password" id="pw2" autocomplete="new-password"></div>
+        </div>
+        <div class="row">
+          <div><label for="owner">GitHub account</label><input type="text" id="owner" spellcheck="false"></div>
+          <div><label for="repo">Repository</label><input type="text" id="repo" spellcheck="false"></div>
+        </div>
+        <p class="hint">Account and repository are filled in for you. Only change them if the site has been moved.</p>
+        <p style="margin:18px 0 0"><button class="primary" id="setup-go">Save and sign in</button></p>
+        <p class="msg bad" id="setup-msg" hidden></p>
+      </div>
+      <div class="card">
+        <h2>How to get a token</h2>
+        <ol>
+          <li>Log in to <a href="https://github.com" target="_blank" rel="noopener">github.com</a> with the account that owns this site.</li>
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
+          <li>Under <em>Repository access</em> choose <em>Only select repositories</em> and pick this site's repository, and nothing else.</li>
+          <li>Under <em>Permissions → Repository permissions</em> set <em>Contents</em> to <em>Read and write</em>.</li>
+          <li>Pick the longest expiry on offer, generate the token, copy it, and paste it above.</li>
+        </ol>
+        <p class="hint">When the token expires, signing in stops working. Make a new token and run this setup again.</p>
+      </div>
     </div>
   </div>
 
@@ -157,9 +173,11 @@
   var API = 'https://api.github.com';
   var BRANCH = 'main';
   var FILE = 'content.json';
-  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
-                del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
+  // Signed-in state is kept for this browser tab only.
+  var store = { get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+                del: function (k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
+  var KEYFILE = 'admin/key.json', ROUNDS = 600000, keyfile = null;
 
   var cfg = { token: '', owner: '', repo: '' };
   var data = null, sha = null, dirty = false;
@@ -345,20 +363,79 @@
       .then(function () { $('save').disabled = false; });
   }
 
-  // ---------- wiring ----------
-  function connect() {
-    cfg.token = $('token').value.trim(); cfg.owner = $('owner').value.trim(); cfg.repo = $('repo').value.trim();
-    var msg = $('login-msg'); msg.hidden = true;
-    if (!cfg.token) { msg.textContent = 'Paste a token first.'; msg.hidden = false; return; }
-    $('connect').disabled = true;
-    load().then(function () {
-      store.set('orvar-admin', JSON.stringify(cfg));
-      $('token').value = '';
-    }).catch(function (e) { msg.textContent = explain(e); msg.hidden = false; })
-      .then(function () { $('connect').disabled = false; });
+  // ---------- password lock ----------
+  // The GitHub token is stored in the repository encrypted with the password (PBKDF2 + AES-GCM).
+  // Neither the password nor the bare token is ever saved anywhere.
+  function b64(bytes) { var s = ''; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s); }
+  function unb64(s) { var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+  function keyFrom(password, salt, rounds) {
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']).then(function (base) {
+      return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: rounds, hash: 'SHA-256' }, base,
+        { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+    });
   }
-  $('connect').addEventListener('click', connect);
-  $('token').addEventListener('keydown', function (e) { if (e.key === 'Enter') connect(); });
+  function lock(token, password) {
+    var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+    return keyFrom(password, salt, ROUNDS).then(function (k) {
+      return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, k, new TextEncoder().encode(token));
+    }).then(function (ct) {
+      return { v: 1, rounds: ROUNDS, salt: b64(salt), iv: b64(iv), ct: b64(new Uint8Array(ct)), owner: cfg.owner, repo: cfg.repo };
+    });
+  }
+  function open(kf, password) {
+    return keyFrom(password, unb64(kf.salt), kf.rounds).then(function (k) {
+      return crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(kf.iv) }, k, unb64(kf.ct));
+    }).then(function (pt) { return new TextDecoder().decode(pt); });
+  }
+  function say(id, text) { var m = $(id); m.textContent = text || ''; m.hidden = !text; }
+
+  function unlock() {
+    var pw = $('pw').value;
+    say('pw-msg');
+    if (!pw) { say('pw-msg', 'Type the password first.'); return; }
+    $('unlock').disabled = true;
+    open(keyfile, pw).then(function (token) {
+      cfg = { token: token, owner: keyfile.owner || d.owner, repo: keyfile.repo || d.repo };
+      return load().then(function () { store.set('orvar-admin', JSON.stringify(cfg)); $('pw').value = ''; },
+        function (e) {
+          say('pw-msg', e.status === 401 ? 'The password is right, but the GitHub token behind it has expired. Use the link below to set up again with a new token.' : explain(e));
+        });
+    }, function () { say('pw-msg', 'Wrong password.'); })
+      .then(function () { $('unlock').disabled = false; });
+  }
+
+  function setup() {
+    var token = $('token').value.trim(), p1 = $('pw1').value, p2 = $('pw2').value;
+    say('setup-msg');
+    if (!token) { say('setup-msg', 'Paste a token first.'); return; }
+    if (p1.length < 10) { say('setup-msg', 'Choose a password of at least 10 characters.'); return; }
+    if (p1 !== p2) { say('setup-msg', 'The two passwords are not the same.'); return; }
+    cfg = { token: token, owner: $('owner').value.trim(), repo: $('repo').value.trim() };
+    $('setup-go').disabled = true;
+    gh('/contents/' + FILE + '?ref=' + BRANCH)                       // proves the token works before anything is saved
+      .then(function () { return gh('/contents/' + KEYFILE + '?ref=' + BRANCH).then(function (f) { return f.sha; }, function (e) { if (e.status === 404) return null; throw e; }); })
+      .then(function (oldSha) {
+        return lock(token, p1).then(function (kf) {
+          var body = { message: 'Set up admin sign-in', content: toB64(JSON.stringify(kf, null, 2) + '\n'), branch: BRANCH };
+          if (oldSha) body.sha = oldSha;
+          return gh('/contents/' + KEYFILE, { method: 'PUT', body: body });
+        });
+      })
+      .then(load)
+      .then(function () {
+        store.set('orvar-admin', JSON.stringify(cfg));
+        $('token').value = $('pw1').value = $('pw2').value = '';
+        status('Setup saved. From now on you sign in with the password.', 'ok');
+      })
+      .catch(function (e) { say('setup-msg', explain(e)); })
+      .then(function () { $('setup-go').disabled = false; });
+  }
+
+  // ---------- wiring ----------
+  $('unlock').addEventListener('click', unlock);
+  $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock(); });
+  $('setup-go').addEventListener('click', setup);
+  $('redo').addEventListener('click', function (e) { e.preventDefault(); $('pw-card').hidden = true; $('setup').hidden = false; });
   $('save').addEventListener('click', save);
   $('logout').addEventListener('click', function () {
     if (dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
@@ -371,12 +448,20 @@
 
   var d = detect(), saved = null;
   try { saved = JSON.parse(store.get('orvar-admin') || 'null'); } catch (e) {}
-  $('owner').value = (saved && saved.owner) || d.owner;
-  $('repo').value = (saved && saved.repo) || d.repo;
-  if (saved && saved.token) {
-    cfg = saved;
-    load().catch(function (e) { $('login-msg').textContent = explain(e); $('login-msg').hidden = false; });
+  $('owner').value = d.owner; $('repo').value = d.repo;
+  function gate() {
+    return fetch('key.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; })
+      .then(function (kf) {
+        keyfile = kf && kf.ct ? kf : null;
+        if (keyfile) { $('owner').value = keyfile.owner || d.owner; $('repo').value = keyfile.repo || d.repo; }
+        $('pw-card').hidden = !keyfile; $('setup').hidden = !!keyfile;
+        if (keyfile) $('pw').focus();
+      });
   }
+  if (saved && saved.token) { cfg = saved; load().catch(function () { store.del('orvar-admin'); return gate(); }); }
+  else gate();
 })();
 </script>
 </body>
