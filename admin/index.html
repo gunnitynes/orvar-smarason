@@ -291,6 +291,7 @@
           el('div', {}, [
             field('Title', bind(el('input', { type: 'text' }), b, 'title')),
             field('Note (year, publisher, translator…)', bind(el('input', { type: 'text' }), b, 'note')),
+            field('Details (shown when someone clicks the book)', bind(el('textarea', { style: 'min-height:7em' }), b, 'info')),
             el('label', { 'class': 'check' }, [whole, el('span', { text: 'Show the whole picture (for flat cover images)' })])
           ])
         ])
@@ -363,7 +364,7 @@
     if (dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
     dirty = false; store.del('orvar-admin'); location.reload();
   });
-  $('add-book').addEventListener('click', function () { data.books.push({ title: '', note: '', image: '', whole: false }); touch(); drawBooks(); });
+  $('add-book').addEventListener('click', function () { data.books.push({ title: '', note: '', info: '', image: '', whole: false }); touch(); drawBooks(); });
   $('add-text').addEventListener('click', function () { data.texts.push({ title: '', body: '' }); touch(); drawTexts(); });
   $('editor').addEventListener('input', function (e) { if (e.target.id) touch(); });
   window.addEventListener('beforeunload', function (e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
