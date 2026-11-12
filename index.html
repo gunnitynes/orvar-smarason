@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Örvar Smárason</title>
+<meta name="description" content="Örvar Smárason, writer.">
+<meta property="og:title" content="Örvar Smárason">
+<meta property="og:type" content="website">
+<meta property="og:image" content="images/portrait.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23ff4a22'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3f0ea;
+    --ink: #16150f;
+    --soft: #6d685e;
+    --rule: rgba(22, 21, 15, .16);
+    --orange: #ff4a22;
+    --pink: #ffa9b9;
+    --green: #3df50a;
+    --dark: #2b2b2b;
+    --display: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+    --body: "EB Garamond", Georgia, serif;
+    --gutter: clamp(20px, 5vw, 72px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: clamp(1.12rem, 0.6vw + 1rem, 1.34rem);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    overflow: hidden;
+  }
+  .hero-text {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--gutter);
+    padding-right: 0;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4em 2.2em;
+    font-size: .74em;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+  nav a { text-decoration: none; padding: .3em 0; border-bottom: 1px solid transparent; transition: border-color .25s; }
+  nav a:hover, nav a:focus-visible { border-bottom-color: var(--ink); }
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(3.6rem, 10.2vw, 11rem);
+    line-height: .86;
+    letter-spacing: -.02em;
+    margin-right: -22vw;            /* the name runs over the photograph */
+    padding-bottom: .08em;
+  }
+  h1 span { display: block; }
+  h1 span + span { padding-left: .62em; font-style: italic; }
+  .tagline {
+    margin: 1.5em 0 0;
+    font-size: .74em;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+  .hero-photo { position: relative; z-index: 1; min-height: 62svh; }
+  .hero-photo img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 42%;
+  }
+  .dot { position: absolute; border-radius: 50%; z-index: 2; mix-blend-mode: multiply; pointer-events: none; }
+  .dot.o { width: clamp(150px, 23vw, 380px); aspect-ratio: 1; background: var(--orange); left: 40%; top: 13%; animation: drift 19s ease-in-out infinite alternate; }
+  .dot.p { width: clamp(90px, 13vw, 210px); aspect-ratio: 1; background: var(--pink); left: 7%; top: 30%; animation: drift 25s ease-in-out infinite alternate-reverse; }
+  .dot.g { width: clamp(20px, 2.4vw, 38px); aspect-ratio: 1; background: var(--green); left: 31%; top: 20%; mix-blend-mode: normal; animation: drift 13s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(1.6vw, 2.6vh, 0); } }
+
+  /* ---------- sections ---------- */
+  main { padding: 0 var(--gutter); }
+  section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: clamp(16px, 4vw, 64px);
+    padding: clamp(64px, 11vw, 150px) 0;
+    border-top: 1px solid var(--rule);
+  }
+  section:first-child { border-top: 0; }
+  h2 {
+    margin: .5em 0 0;
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: .74em;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+  .prose { max-width: 34em; }
+  .prose p { margin: 0 0 1.1em; }
+  .prose p:last-child { margin-bottom: 0; }
+  .lead p:first-child {
+    font-family: var(--display);
+    font-size: clamp(1.7rem, 2.6vw + .6rem, 2.9rem);
+    line-height: 1.22;
+    font-weight: 400;
+    max-width: 21em;
+    margin-bottom: .9em;
+  }
+  .lead { max-width: none; }
+  .lead p { max-width: 34em; }
+
+  .books {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 235px), 1fr));
+    gap: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 40px);
+  }
+  .book { margin: 0; }
+  .book .frame { aspect-ratio: 4 / 5; background: var(--dark); overflow: hidden; }
+  .book .frame img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.2, .7, .2, 1); }
+  .book .frame.whole { padding: 9% 14%; }
+  .book .frame.whole img { object-fit: contain; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .45)); }
+  .book:hover .frame img { transform: scale(1.035); }
+  .book figcaption { padding-top: .95em; }
+  .book .t { font-family: var(--display); font-style: italic; font-size: 1.32em; line-height: 1.15; }
+  .book .n { margin-top: .45em; font-size: .82em; line-height: 1.4; color: var(--soft); }
+
+  .text-item + .text-item { margin-top: clamp(48px, 7vw, 96px); }
+  .text-item h3 {
+    margin: 0 0 .7em;
+    font-family: var(--display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.6rem, 2vw + .7rem, 2.3rem);
+    line-height: 1.15;
+  }
+
+  .mail {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(1.7rem, 5.4vw, 4.6rem);
+    line-height: 1.1;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: linear-gradient(var(--orange), var(--orange)) 0 100% / 100% 2px no-repeat;
+    padding-bottom: .08em;
+    transition: background-size .35s;
+  }
+  .mail:hover, .mail:focus-visible { background-size: 100% .5em; }
+
+  footer {
+    display: flex; justify-content: space-between; gap: 1em; flex-wrap: wrap;
+    padding: 28px var(--gutter) 36px;
+    border-top: 1px solid var(--rule);
+    font-size: .74em; letter-spacing: .14em; text-transform: uppercase; color: var(--soft);
+  }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 1s ease, transform 1s cubic-bezier(.2, .7, .2, 1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .hero-text { padding-right: var(--gutter); padding-bottom: 28px; gap: 11vh; }
+    h1 { margin-right: 0; font-size: clamp(3.4rem, 19vw, 6.4rem); }
+    .hero-photo { min-height: 78svh; }
+    .dot.o { left: 52%; top: 9%; width: 42vw; }
+    .dot.p { left: 62%; top: 25%; width: 22vw; }
+    .dot.g { left: 44%; top: 7%; width: 5vw; }
+    section { grid-template-columns: 1fr; gap: 26px; }
+    h2 { margin: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .dot { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .book .frame img { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-text">
+    <nav aria-label="Sections">
+      <a href="#about" data-label="about">About</a>
+      <a href="#books" data-label="books">Books</a>
+      <a href="#texts" data-label="texts" data-nav="texts" hidden>Texts</a>
+      <a href="#contact" data-label="contact">Contact</a>
+    </nav>
+    <div>
+      <h1 id="name"><span>Örvar</span><span>Smárason</span></h1>
+      <p class="tagline" id="tagline">Writer</p>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img src="images/portrait.jpg" alt="Portrait of Örvar Smárason" width="1333" height="2000" fetchpriority="high">
+  </div>
+  <i class="dot o"></i><i class="dot p"></i><i class="dot g"></i>
+</header>
+
+<main>
+  <section id="about">
+    <h2 data-label="about">About</h2>
+    <div class="prose lead reveal" id="about-body"></div>
+  </section>
+
+  <section id="books">
+    <h2 data-label="books">Books</h2>
+    <div class="books" id="books-body"></div>
+  </section>
+
+  <section id="texts" hidden>
+    <h2 data-label="texts">Texts</h2>
+    <div id="texts-body"></div>
+  </section>
+
+  <section id="contact">
+    <h2 data-label="contact">Contact</h2>
+    <div class="reveal">
+      <a class="mail" id="mail" href="mailto:apfelblut@yahoo.com">apfelblut@yahoo.com</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span id="foot-name">Örvar Smárason</span>
+  <span id="foot-note"></span>
+</footer>
+
+<noscript>
+  <p style="padding:0 var(--gutter) 40px">Örvar Smárason, writer. Contact: apfelblut@yahoo.com</p>
+</noscript>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  // Plain text in, paragraphs out. *word* becomes italic, web addresses become links.
+  function rich(text) {
+    return String(text || '').replace(/\r/g, '').split(/\n{2,}/).map(function (p) {
+      p = p.trim();
+      if (!p) return '';
+      var h = esc(p)
+        .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+        .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g, '<a href="$1" rel="noopener">$1</a>')
+        .replace(/\n/g, '<br>');
+      return '<p>' + h + '</p>';
+    }).join('');
+  }
+  function watch() {
+    var els = document.querySelectorAll('.reveal:not(.in)');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  }
+  function render(c) {
+    var name = (c.name || '').trim();
+    if (name) {
+      var parts = name.split(/\s+/);
+      var first = parts.length > 1 ? parts.slice(0, -1).join(' ') : name;
+      var last = parts.length > 1 ? parts[parts.length - 1] : '';
+      $('name').innerHTML = '<span>' + esc(first) + '</span>' + (last ? '<span>' + esc(last) + '</span>' : '');
+      $('foot-name').textContent = name;
+      document.title = name;
+    }
+    $('tagline').textContent = c.tagline || '';
+    $('tagline').hidden = !c.tagline;
+
+    var labels = c.labels || {};
+    document.querySelectorAll('[data-label]').forEach(function (el) {
+      var v = labels[el.getAttribute('data-label')];
+      if (v) el.textContent = v;
+    });
+
+    $('about-body').innerHTML = rich(c.about);
+    $('about').hidden = !(c.about || '').trim();
+
+    var books = (c.books || []).filter(function (b) { return b && (b.title || b.image); });
+    $('books-body').innerHTML = books.map(function (b) {
+      return '<figure class="book reveal">' +
+        (b.image ? '<div class="frame' + (b.whole ? ' whole' : '') + '"><img loading="lazy" src="' + esc(b.image) + '" alt="' + esc(b.title || '') + '"></div>' : '') +
+        '<figcaption><div class="t">' + esc(b.title || '') + '</div>' +
+        (b.note ? '<div class="n">' + esc(b.note) + '</div>' : '') +
+        '</figcaption></figure>';
+    }).join('');
+    $('books').hidden = !books.length;
+
+    var texts = (c.texts || []).filter(function (t) { return t && ((t.title || '').trim() || (t.body || '').trim()); });
+    $('texts-body').innerHTML = texts.map(function (t) {
+      return '<article class="text-item reveal">' +
+        (t.title ? '<h3>' + esc(t.title) + '</h3>' : '') +
+        '<div class="prose">' + rich(t.body) + '</div></article>';
+    }).join('');
+    $('texts').hidden = !texts.length;
+    document.querySelector('[data-nav="texts"]').hidden = !texts.length;
+
+    if (c.email) {
+      $('mail').textContent = c.email;
+      $('mail').href = 'mailto:' + c.email;
+    }
+    $('foot-note').textContent = c.footer || '';
+    watch();
+  }
+
+  fetch('content.json', { cache: 'no-cache' })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render)
+    .catch(function () { watch(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin · Örvar Smárason</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23ff4a22'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --paper: #f3f0ea; --card: #fbf9f5; --ink: #16150f; --soft: #6d685e; --rule: rgba(22,21,15,.18); --orange: #ff4a22; --ok: #1d6b3a; --bad: #a3231a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 1.1rem/1.5 "EB Garamond", Georgia, serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 28px 20px 140px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+  h1 { font: 400 2.3rem/1 "Cormorant Garamond", Georgia, serif; margin: 0; }
+  h1 em { color: var(--soft); }
+  h2 { font: 400 .8rem/1.2 "EB Garamond", Georgia, serif; letter-spacing: .28em; text-transform: uppercase; color: var(--soft); margin: 0 0 16px; }
+  a { color: inherit; }
+  .card { background: var(--card); border: 1px solid var(--rule); padding: 22px; margin-bottom: 20px; }
+  label { display: block; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); margin: 14px 0 5px; }
+  label:first-child { margin-top: 0; }
+  input[type=text], input[type=email], input[type=password], textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--rule); background: #fff; color: var(--ink);
+    font: inherit; border-radius: 0;
+  }
+  textarea { min-height: 9em; resize: vertical; line-height: 1.5; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .hint { font-size: .92rem; color: var(--soft); margin: 6px 0 0; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 12px; }
+  button {
+    font: inherit; font-size: .82rem; letter-spacing: .14em; text-transform: uppercase;
+    padding: 10px 16px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; border-radius: 0;
+  }
+  button:hover { background: var(--ink); color: var(--paper); }
+  button.primary { background: var(--ink); color: var(--paper); }
+  button.primary:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
+  button.small { padding: 6px 10px; font-size: .72rem; }
+  button[disabled] { opacity: .45; cursor: default; }
+  .item { border: 1px solid var(--rule); background: #fff; padding: 16px; margin-bottom: 14px; }
+  .item-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .item-head span { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  .tools { display: flex; gap: 6px; }
+  .bookgrid { display: grid; grid-template-columns: 110px 1fr; gap: 16px; }
+  .thumb { width: 110px; aspect-ratio: 4/5; background: #2b2b2b; display: grid; place-items: center; color: #aaa; font-size: .8rem; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 1rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  .check input { width: 18px; height: 18px; accent-color: var(--orange); }
+  .savebar {
+    position: fixed; left: 0; right: 0; bottom: 0; background: var(--ink); color: var(--paper);
+    padding: 14px 20px; display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap;
+  }
+  .savebar button { border-color: var(--paper); color: var(--paper); }
+  .savebar button.primary { background: var(--orange); border-color: var(--orange); color: #fff; }
+  #status { font-size: 1rem; }
+  #status.ok { color: #9be3b1; } #status.bad { color: #ffb0a6; }
+  .msg { margin-top: 12px; } .msg.bad { color: var(--bad); }
+  ol { padding-left: 1.2em; margin: 8px 0 0; } li { margin-bottom: 4px; }
+  code { font-size: .88em; background: rgba(22,21,15,.07); padding: 1px 5px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 560px) { .row, .row4 { grid-template-columns: 1fr 1fr; } .row { grid-template-columns: 1fr; } .bookgrid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Örvar Smárason <em>· admin</em></h1>
+    <a href="../" target="_blank" rel="noopener">View the site ↗</a>
+  </header>
+
+  <!-- ============ sign in ============ -->
+  <div id="login">
+    <div class="card">
+      <h2>Sign in</h2>
+      <p style="margin-top:0">This page edits the website. The site's text and pictures are stored on GitHub, so you sign in with a GitHub access key (a "token"). You only do this once on each computer.</p>
+      <label for="token">GitHub access token</label>
+      <input type="password" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      <div class="row">
+        <div><label for="owner">GitHub account</label><input type="text" id="owner" spellcheck="false"></div>
+        <div><label for="repo">Repository</label><input type="text" id="repo" spellcheck="false"></div>
+      </div>
+      <p class="hint">Account and repository are filled in for you. Only change them if the site has been moved.</p>
+      <p style="margin:18px 0 0"><button class="primary" id="connect">Sign in</button></p>
+      <p class="msg bad" id="login-msg" hidden></p>
+    </div>
+    <div class="card">
+      <h2>How to get a token</h2>
+      <ol>
+        <li>Log in to <a href="https://github.com" target="_blank" rel="noopener">github.com</a> with an account that is allowed to edit this repository.</li>
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
+        <li>Under <em>Repository access</em> choose <em>Only select repositories</em> and pick this site's repository.</li>
+        <li>Under <em>Permissions → Repository permissions</em> set <em>Contents</em> to <em>Read and write</em>.</li>
+        <li>Generate the token, copy it, and paste it above.</li>
+      </ol>
+      <p class="hint">The token is kept only in this browser. Use "Sign out" on a shared computer.</p>
+    </div>
+  </div>
+
+  <!-- ============ editor ============ -->
+  <div id="editor" hidden>
+    <div class="card">
+      <h2>Front page</h2>
+      <div class="row">
+        <div><label for="f-name">Name</label><input type="text" id="f-name"></div>
+        <div><label for="f-tagline">Line under the name</label><input type="text" id="f-tagline"></div>
+      </div>
+      <label for="f-email">Email address</label>
+      <input type="email" id="f-email">
+    </div>
+
+    <div class="card">
+      <h2>About</h2>
+      <label for="f-about">Text</label>
+      <textarea id="f-about" style="min-height:12em"></textarea>
+      <p class="hint">Leave an empty line between paragraphs. The first paragraph is shown large. Put *stars* around words for <em>italics</em>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Books</h2>
+      <div id="books"></div>
+      <button id="add-book">+ Add a book</button>
+    </div>
+
+    <div class="card">
+      <h2>Texts</h2>
+      <p class="hint" style="margin:0 0 14px">Anything you want to add: a statement, an excerpt, a biography, reviews. Each text gets a heading and appears in its own "Texts" section. The section is hidden while there are no texts.</p>
+      <div id="texts"></div>
+      <button id="add-text">+ Add a text</button>
+    </div>
+
+    <div class="card">
+      <h2>Small print</h2>
+      <label>Section headings</label>
+      <div class="row4">
+        <input type="text" id="l-about" aria-label="About heading">
+        <input type="text" id="l-books" aria-label="Books heading">
+        <input type="text" id="l-texts" aria-label="Texts heading">
+        <input type="text" id="l-contact" aria-label="Contact heading">
+      </div>
+      <p class="hint">Rename these to use another language, for example Um / Bækur / Textar / Hafa samband.</p>
+      <label for="f-footer">Footer note (optional)</label>
+      <input type="text" id="f-footer">
+    </div>
+  </div>
+</div>
+
+<div class="savebar" id="savebar" hidden>
+  <span id="status">Ready.</span>
+  <button class="primary" id="save">Save and publish</button>
+  <button id="logout">Sign out</button>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var API = 'https://api.github.com';
+  var BRANCH = 'main';
+  var FILE = 'content.json';
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+                del: function (k) { try { localStorage.removeItem(k); } catch (e) {} } };
+
+  var cfg = { token: '', owner: '', repo: '' };
+  var data = null, sha = null, dirty = false;
+
+  // Work out which repository this site lives in from its address.
+  function detect() {
+    var host = location.hostname, seg = location.pathname.split('/').filter(Boolean);
+    if (/\.github\.io$/.test(host)) {
+      var owner = host.split('.')[0];
+      return { owner: owner, repo: (seg[0] && seg[0] !== 'admin') ? seg[0] : owner + '.github.io' };
+    }
+    return { owner: 'gunnitynes', repo: 'orvar-smarason' };
+  }
+
+  function gh(path, opts) {
+    opts = opts || {};
+    return fetch(API + '/repos/' + cfg.owner + '/' + cfg.repo + path, {
+      method: opts.method || 'GET',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + cfg.token, 'X-GitHub-Api-Version': '2022-11-28' },
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      cache: 'no-store'
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.message || ('GitHub error ' + r.status)); e.status = r.status; throw e; }
+        return j;
+      });
+    });
+  }
+  function toB64(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function fromB64(b64) {
+    var bin = atob(String(b64).replace(/\s/g, '')), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+  function status(text, cls) { var s = $('status'); s.textContent = text; s.className = cls || ''; }
+  function touch() { dirty = true; status('Unsaved changes.'); }
+  function explain(e) {
+    if (e.status === 401) return 'GitHub did not accept the token. It may be mistyped or expired.';
+    if (e.status === 403) return 'The token is not allowed to edit this repository. Check that Contents is set to "Read and write".';
+    if (e.status === 404) return 'Could not find the repository with this token. Check the account, the repository name, and that the token includes this repository.';
+    if (e.status === 409) return 'The site was changed somewhere else in the meantime. Reload this page and try again.';
+    return e.message || 'Something went wrong.';
+  }
+
+  // ---------- load ----------
+  function load() {
+    return gh('/contents/' + FILE + '?ref=' + BRANCH).then(function (f) {
+      sha = f.sha;
+      data = JSON.parse(fromB64(f.content));
+      data.labels = data.labels || {};
+      data.books = data.books || [];
+      data.texts = data.texts || [];
+      fill();
+      $('login').hidden = true; $('editor').hidden = false; $('savebar').hidden = false;
+      dirty = false; status('Ready.');
+    });
+  }
+
+  function fill() {
+    $('f-name').value = data.name || '';
+    $('f-tagline').value = data.tagline || '';
+    $('f-email').value = data.email || '';
+    $('f-about').value = data.about || '';
+    $('f-footer').value = data.footer || '';
+    ['about', 'books', 'texts', 'contact'].forEach(function (k) { $('l-' + k).value = data.labels[k] || ''; });
+    drawBooks(); drawTexts();
+  }
+  function read() {
+    data.name = $('f-name').value.trim();
+    data.tagline = $('f-tagline').value.trim();
+    data.email = $('f-email').value.trim();
+    data.about = $('f-about').value;
+    data.footer = $('f-footer').value.trim();
+    ['about', 'books', 'texts', 'contact'].forEach(function (k) { data.labels[k] = $('l-' + k).value.trim(); });
+  }
+
+  // ---------- list helpers ----------
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] !== false && attrs[k] != null) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function head(list, i, word, redraw) {
+    function move(d) { var j = i + d; if (j < 0 || j >= list.length) return; var t = list[i]; list[i] = list[j]; list[j] = t; touch(); redraw(); }
+    return el('div', { 'class': 'item-head' }, [
+      el('span', { text: word + ' ' + (i + 1) }),
+      el('div', { 'class': 'tools' }, [
+        el('button', { 'class': 'small', type: 'button', text: '↑', 'aria-label': 'Move up', disabled: i === 0, onclick: function () { move(-1); } }),
+        el('button', { 'class': 'small', type: 'button', text: '↓', 'aria-label': 'Move down', disabled: i === list.length - 1, onclick: function () { move(1); } }),
+        el('button', { 'class': 'small', type: 'button', text: 'Remove', onclick: function () {
+          if (confirm('Remove this ' + word.toLowerCase() + '?')) { list.splice(i, 1); touch(); redraw(); } } })
+      ])
+    ]);
+  }
+  function field(labelText, node) { return el('div', {}, [el('label', { text: labelText }), node]); }
+  function bind(node, obj, key) { node.value = obj[key] || ''; node.addEventListener('input', function () { obj[key] = node.value; touch(); }); return node; }
+
+  // ---------- books ----------
+  function drawBooks() {
+    var box = $('books'); box.innerHTML = '';
+    data.books.forEach(function (b, i) {
+      var thumb = el('div', { 'class': 'thumb' });
+      function showThumb(src) { thumb.innerHTML = ''; if (src) thumb.appendChild(el('img', { src: src, alt: '' })); else thumb.textContent = 'No picture'; }
+      showThumb(b._preview || (b.image ? '../' + b.image : ''));
+      var file = el('input', { type: 'file', accept: 'image/*', hidden: true });
+      var pick = el('button', { 'class': 'small', type: 'button', text: b.image ? 'Change picture' : 'Add picture', onclick: function () { file.click(); } });
+      file.addEventListener('change', function () {
+        if (!file.files[0]) return;
+        pick.disabled = true; status('Uploading picture…');
+        upload(file.files[0], b.title).then(function (r) {
+          b.image = r.path; b._preview = r.preview; showThumb(r.preview);
+          pick.textContent = 'Change picture'; touch(); status('Picture uploaded. Remember to save.');
+        }).catch(function (e) { status(explain(e), 'bad'); }).then(function () { pick.disabled = false; file.value = ''; });
+      });
+      var whole = el('input', { type: 'checkbox' }); whole.checked = !!b.whole;
+      whole.addEventListener('change', function () { b.whole = whole.checked; touch(); });
+      box.appendChild(el('div', { 'class': 'item' }, [
+        head(data.books, i, 'Book', drawBooks),
+        el('div', { 'class': 'bookgrid' }, [
+          el('div', {}, [thumb, el('div', { style: 'margin-top:8px' }, [pick, file])]),
+          el('div', {}, [
+            field('Title', bind(el('input', { type: 'text' }), b, 'title')),
+            field('Note (year, publisher, translator…)', bind(el('input', { type: 'text' }), b, 'note')),
+            el('label', { 'class': 'check' }, [whole, el('span', { text: 'Show the whole picture (for flat cover images)' })])
+          ])
+        ])
+      ]));
+    });
+  }
+
+  // Shrink the picture in the browser, then store it in the repository.
+  function upload(f, title) {
+    return new Promise(function (res, rej) {
+      var img = new Image(), url = URL.createObjectURL(f);
+      img.onload = function () {
+        var max = 1400, s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+        var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+        g.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        res(c.toDataURL('image/jpeg', 0.84));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); rej(new Error('This picture format cannot be read here. Try a JPG or PNG.')); };
+      img.src = url;
+    }).then(function (dataUrl) {
+      var slug = String(title || 'picture').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/þ/g, 'th').replace(/ð/g, 'd').replace(/æ/g, 'ae').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'picture';
+      var path = 'images/' + slug + '-' + Date.now().toString(36) + '.jpg';
+      return gh('/contents/' + path, { method: 'PUT', body: { message: 'Add picture ' + path, content: dataUrl.split(',')[1], branch: BRANCH } })
+        .then(function () { return { path: path, preview: dataUrl }; });
+    });
+  }
+
+  // ---------- texts ----------
+  function drawTexts() {
+    var box = $('texts'); box.innerHTML = '';
+    data.texts.forEach(function (t, i) {
+      box.appendChild(el('div', { 'class': 'item' }, [
+        head(data.texts, i, 'Text', drawTexts),
+        field('Heading', bind(el('input', { type: 'text' }), t, 'title')),
+        field('Text', bind(el('textarea', {}), t, 'body'))
+      ]));
+    });
+  }
+
+  // ---------- save ----------
+  function save() {
+    read();
+    var out = JSON.parse(JSON.stringify(data, function (k, v) { return k.charAt(0) === '_' ? undefined : v; }));
+    $('save').disabled = true; status('Saving…');
+    gh('/contents/' + FILE, { method: 'PUT', body: { message: 'Update site content', content: toB64(JSON.stringify(out, null, 2) + '\n'), sha: sha, branch: BRANCH } })
+      .then(function (r) { sha = r.content.sha; dirty = false; status('Saved. The site updates in about a minute.', 'ok'); })
+      .catch(function (e) { status(explain(e), 'bad'); })
+      .then(function () { $('save').disabled = false; });
+  }
+
+  // ---------- wiring ----------
+  function connect() {
+    cfg.token = $('token').value.trim(); cfg.owner = $('owner').value.trim(); cfg.repo = $('repo').value.trim();
+    var msg = $('login-msg'); msg.hidden = true;
+    if (!cfg.token) { msg.textContent = 'Paste a token first.'; msg.hidden = false; return; }
+    $('connect').disabled = true;
+    load().then(function () {
+      store.set('orvar-admin', JSON.stringify(cfg));
+      $('token').value = '';
+    }).catch(function (e) { msg.textContent = explain(e); msg.hidden = false; })
+      .then(function () { $('connect').disabled = false; });
+  }
+  $('connect').addEventListener('click', connect);
+  $('token').addEventListener('keydown', function (e) { if (e.key === 'Enter') connect(); });
+  $('save').addEventListener('click', save);
+  $('logout').addEventListener('click', function () {
+    if (dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
+    dirty = false; store.del('orvar-admin'); location.reload();
+  });
+  $('add-book').addEventListener('click', function () { data.books.push({ title: '', note: '', image: '', whole: false }); touch(); drawBooks(); });
+  $('add-text').addEventListener('click', function () { data.texts.push({ title: '', body: '' }); touch(); drawTexts(); });
+  $('editor').addEventListener('input', function (e) { if (e.target.id) touch(); });
+  window.addEventListener('beforeunload', function (e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  var d = detect(), saved = null;
+  try { saved = JSON.parse(store.get('orvar-admin') || 'null'); } catch (e) {}
+  $('owner').value = (saved && saved.owner) || d.owner;
+  $('repo').value = (saved && saved.repo) || d.repo;
+  if (saved && saved.token) {
+    cfg = saved;
+    load().catch(function (e) { $('login-msg').textContent = explain(e); $('login-msg').hidden = false; });
+  }
+})();
+</script>
+</body>
+</html>

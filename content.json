@@ -1,0 +1,46 @@
+{
+  "name": "Örvar Smárason",
+  "tagline": "Writer",
+  "email": "apfelblut@yahoo.com",
+  "labels": {
+    "about": "About",
+    "books": "Books",
+    "texts": "Texts",
+    "contact": "Contact"
+  },
+  "about": "Örvar Smárason is an Icelandic writer and musician, and a founding member of the band múm.\n\nHis books include *Það sem við sjáum þegar við lokum augunum* and the short story collection *Svefngríman*. His writing has been published in French and Italian translation.",
+  "books": [
+    {
+      "title": "Það sem við sjáum þegar við lokum augunum",
+      "note": "",
+      "image": "images/thad-sem-vid-sjaum.jpg",
+      "whole": true
+    },
+    {
+      "title": "Svefngríman",
+      "note": "Short stories",
+      "image": "images/svefngriman.jpg",
+      "whole": false
+    },
+    {
+      "title": "Le masque de sommeil et autres nouvelles",
+      "note": "French edition of Svefngríman, translated by Hadrien Chalard. Traverse(s) / Projectiles",
+      "image": "images/le-masque-de-sommeil.jpg",
+      "whole": false
+    },
+    {
+      "title": "Scapigliata, lisciata",
+      "note": "Italian edition of Úfin, strokin. Scritturapura",
+      "image": "images/scapigliata-lisciata.jpg",
+      "whole": false
+    },
+    {
+      "title": "Örvar & Sindri's Apfelsin Bros. Picture Book",
+      "note": "",
+      "image": "images/apfelsin-bros.jpg",
+      "whole": false
+    }
+  ],
+  "texts": [],
+  "footer": ""
+}
